@@ -5,9 +5,9 @@ using OfficeOpenXml;
 
 namespace ExcelCommonWords
 {
-    class Program
+    public class CommonWordsCheck
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var commonWords = new List<string>();
             var commonWordRowsInColumn1 = new List<string>();
