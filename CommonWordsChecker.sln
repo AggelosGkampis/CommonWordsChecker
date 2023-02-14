@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonWordsChecker", "Commo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopApp_CommonWordsChecker", "DesktopApp_CommonWordsChecker\DesktopApp_CommonWordsChecker.csproj", "{58AC23A8-A799-4FCC-9158-224CD9CA83F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonWordsApplication", "CommonWordsApplication\CommonWordsApplication.csproj", "{71CFE654-8A79-4B01-90BD-0DB1621AF9BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{58AC23A8-A799-4FCC-9158-224CD9CA83F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58AC23A8-A799-4FCC-9158-224CD9CA83F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58AC23A8-A799-4FCC-9158-224CD9CA83F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71CFE654-8A79-4B01-90BD-0DB1621AF9BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71CFE654-8A79-4B01-90BD-0DB1621AF9BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71CFE654-8A79-4B01-90BD-0DB1621AF9BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71CFE654-8A79-4B01-90BD-0DB1621AF9BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

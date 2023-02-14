@@ -27,6 +27,8 @@ namespace DesktopApp_CommonWordsChecker
             }
         }
 
+
+
         private void Form1_DragDrop(object sender, DragEventArgs e)
         {
             CommonWordsCheck commonWords = new CommonWordsCheck(); 
@@ -38,6 +40,11 @@ namespace DesktopApp_CommonWordsChecker
                 var results = commonWords.GetCommonWords(file.FullName);
                 dataGridView1.DataSource = results;
             }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
