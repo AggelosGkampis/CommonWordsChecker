@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopAppCommonWords", "DesktopAppCommonWords\DesktopAppCommonWords.csproj", "{6ACA554A-D781-465F-ACC8-266214238848}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesktopAppCommonWords", "DesktopAppCommonWords\DesktopAppCommonWords.csproj", "{6ACA554A-D781-465F-ACC8-266214238848}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupCommonWordsChecker", "SetupCommonWordsChecker\SetupCommonWordsChecker.vdproj", "{97248C92-5A32-40BF-A661-5FC8649DE5B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,8 @@ Global
 		{6ACA554A-D781-465F-ACC8-266214238848}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6ACA554A-D781-465F-ACC8-266214238848}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6ACA554A-D781-465F-ACC8-266214238848}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97248C92-5A32-40BF-A661-5FC8649DE5B2}.Debug|Any CPU.ActiveCfg = Debug
+		{97248C92-5A32-40BF-A661-5FC8649DE5B2}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

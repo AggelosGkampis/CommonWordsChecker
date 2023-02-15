@@ -50,10 +50,11 @@
             // 
             // btnchoose
             // 
+            this.btnchoose.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.btnchoose.FlatAppearance.BorderColor = System.Drawing.Color.Blue;
             this.btnchoose.FlatAppearance.BorderSize = 2;
             this.btnchoose.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RosyBrown;
-            this.btnchoose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
+            this.btnchoose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Green;
             this.btnchoose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnchoose.Font = new System.Drawing.Font("Gill Sans MT", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnchoose.Location = new System.Drawing.Point(247, 98);
@@ -61,7 +62,7 @@
             this.btnchoose.Size = new System.Drawing.Size(121, 31);
             this.btnchoose.TabIndex = 1;
             this.btnchoose.Text = "Choose File";
-            this.btnchoose.UseVisualStyleBackColor = true;
+            this.btnchoose.UseVisualStyleBackColor = false;
             this.btnchoose.Click += new System.EventHandler(this.btnchoose_Click);
             // 
             // txtpath
@@ -94,10 +95,11 @@
             // 
             // btnExport
             // 
+            this.btnExport.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.btnExport.FlatAppearance.BorderColor = System.Drawing.Color.Blue;
             this.btnExport.FlatAppearance.BorderSize = 2;
             this.btnExport.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RosyBrown;
-            this.btnExport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
+            this.btnExport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.MediumSlateBlue;
             this.btnExport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExport.Font = new System.Drawing.Font("Gill Sans MT", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnExport.Location = new System.Drawing.Point(455, 98);
@@ -105,7 +107,7 @@
             this.btnExport.Size = new System.Drawing.Size(121, 31);
             this.btnExport.TabIndex = 5;
             this.btnExport.Text = "Export File";
-            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.UseVisualStyleBackColor = false;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // Form1
