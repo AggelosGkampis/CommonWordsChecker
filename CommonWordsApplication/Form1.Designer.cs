@@ -52,6 +52,7 @@
             this.ChooseFile.TabIndex = 1;
             this.ChooseFile.Text = "Choose File";
             this.ChooseFile.UseVisualStyleBackColor = false;
+            this.ChooseFile.Click += new System.EventHandler(this.ChooseFile_Click_1);
             // 
             // Form1
             // 
