@@ -33,6 +33,7 @@
             this.txtpath = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.btnExport = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -55,7 +56,7 @@
             this.btnchoose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
             this.btnchoose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnchoose.Font = new System.Drawing.Font("Gill Sans MT", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnchoose.Location = new System.Drawing.Point(75, 98);
+            this.btnchoose.Location = new System.Drawing.Point(247, 98);
             this.btnchoose.Name = "btnchoose";
             this.btnchoose.Size = new System.Drawing.Size(121, 31);
             this.btnchoose.TabIndex = 1;
@@ -91,12 +92,29 @@
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
+            // btnExport
+            // 
+            this.btnExport.FlatAppearance.BorderColor = System.Drawing.Color.Blue;
+            this.btnExport.FlatAppearance.BorderSize = 2;
+            this.btnExport.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RosyBrown;
+            this.btnExport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
+            this.btnExport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExport.Font = new System.Drawing.Font("Gill Sans MT", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnExport.Location = new System.Drawing.Point(455, 98);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(121, 31);
+            this.btnExport.TabIndex = 5;
+            this.btnExport.Text = "Export File";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnExport);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.txtpath);
             this.Controls.Add(this.btnchoose);
@@ -118,5 +136,6 @@
         private TextBox txtpath;
         private Panel panel1;
         private DataGridView dataGridView1;
+        private Button btnExport;
     }
 }
