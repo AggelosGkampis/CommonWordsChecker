@@ -17,7 +17,6 @@ namespace DesktopAppCommonWords
             Application.Run(new Form1());
         }
 
-
         public static DataTable GetCommonWords(ExcelWorkbook workbook)
         {
             var commonWords = new List<string>();
@@ -30,13 +29,21 @@ namespace DesktopAppCommonWords
 
             var words1 = column1.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             var words2 = column2.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+          
+            var ignoredWords = new List<string> { "THE", "I", "A", "YOU", "HE", "SHE", "IT", "WE", "THEY", "AN", "AND", "OR", 
+                "BUT", "SO", "IN", "ON", "AT", "IS", "ARE", "WAS", "WERE", "BE", "BEEN", "AM", "DO", "DOES", "DID", "HAVE", 
+                "HAS", "HAD", "OF", "TO", "FOR", "FROM", "BY", "WITH", "THAT", "THIS", "THOSE", "THESE", "IF", "THEN", "ELSE", 
+                "WHEN", "WHERE", "WHILE", "HOW", "WHAT", "WHO", "WHOM", "WHOSE", "NOT", "NO", "YES", "TRUE", "FALSE", "NULL" };
+
 
             foreach (var word1 in words1)
             {
                 foreach (var word2 in words2)
                 {
                     if (string.Equals(word1, word2, StringComparison.OrdinalIgnoreCase)
-                        && !commonWords.Contains(word1))
+                        //&& !commonWords.Contains(word1, StringComparer.OrdinalIgnoreCase)
+                        && !ignoredWords.Contains(word1, StringComparer.OrdinalIgnoreCase)
+                        )
                     {
                         commonWords.Add(word1);
                         commonWordRowsInColumn1.Add($"Row {Array.IndexOf(words1, word1) + 1}");
@@ -62,6 +69,5 @@ namespace DesktopAppCommonWords
 
             return table;
         }
-
     }
 }
