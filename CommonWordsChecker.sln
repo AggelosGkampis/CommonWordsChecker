@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesktopAppCommonWords", "DesktopAppCommonWords\DesktopAppCommonWords.csproj", "{6ACA554A-D781-465F-ACC8-266214238848}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupCommonWords", "SetupCommonWords\SetupCommonWords.vdproj", "{D03D55DB-09C4-49A9-B06B-B5DF3A69E887}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupCommonWords", "SetupCommonWords\SetupCommonWords.vdproj", "{241EB0FB-3F5C-4907-B3CF-3735125B782C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,8 +17,8 @@ Global
 		{6ACA554A-D781-465F-ACC8-266214238848}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6ACA554A-D781-465F-ACC8-266214238848}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6ACA554A-D781-465F-ACC8-266214238848}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D03D55DB-09C4-49A9-B06B-B5DF3A69E887}.Debug|Any CPU.ActiveCfg = Debug
-		{D03D55DB-09C4-49A9-B06B-B5DF3A69E887}.Release|Any CPU.ActiveCfg = Release
+		{241EB0FB-3F5C-4907-B3CF-3735125B782C}.Debug|Any CPU.ActiveCfg = Debug
+		{241EB0FB-3F5C-4907-B3CF-3735125B782C}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
