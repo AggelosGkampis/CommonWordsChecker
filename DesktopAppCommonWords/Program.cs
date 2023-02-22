@@ -1,10 +1,8 @@
 using OfficeOpenXml;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Windows.Forms;
-using static OfficeOpenXml.ExcelErrorValue;
+
+
+
 
 namespace DesktopAppCommonWords
 {
@@ -24,63 +22,59 @@ namespace DesktopAppCommonWords
 
         public static DataTable GetCommonWords(ExcelWorkbook workbook)
         {
-            //var commonWords = new HashSet<string>();
             var worksheet = workbook.Worksheets[0];
             var ignoredWords = new HashSet<string> { "THE", "I", "A", "YOU", "HE", "SHE", "IT", "WE", "THEY", "AN", "AND", "OR",
-                                     "BUT", "SO", "IN", "ON", "AT", "IS", "ARE", "WAS", "WERE", "BE", "BEEN", "AM", "DO", "DOES", "DID", "HAVE",
-                                     "HAS", "HAD", "OF", "TO", "FOR", "FROM", "BY", "WITH", "THAT", "THIS", "THOSE", "THESE", "IF", "THEN", "ELSE",
-                                     "WHEN", "WHERE", "WHILE", "HOW", "WHAT", "WHO", "WHOM", "WHOSE", "NOT", "NO", "YES", "TRUE", "FALSE", "NULL", "foreign" };
+                                         "BUT", "SO", "IN", "ON", "AT", "IS", "ARE", "WAS", "WERE", "BE", "BEEN", "AM", "DO", "DOES", "DID", "HAVE",
+                                         "HAS", "HAD", "OF", "TO", "FOR", "FROM", "BY", "WITH", "THAT", "THIS", "THOSE", "THESE", "IF", "THEN", "ELSE",
+                                         "WHEN", "WHERE", "WHILE", "HOW", "WHAT", "WHO", "WHOM", "WHOSE", "NOT", "NO", "YES", "TRUE", "FALSE", "NULL", "foreign","Movie", "Film" };
 
-            var column1Words = new Dictionary<string, List<string>>();
-            var column2Words = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> column1Words;
+            Dictionary<string, List<string>> column2Words;
 
-            column1Words = DictionariesWithSplitWords(ignoredWords, column1Words, worksheet);
-            column2Words = DictionariesWithSplitWords2(ignoredWords, column2Words, worksheet);
+            DictionariesWithSplitWords(ignoredWords, worksheet, out column1Words, out column2Words);
+
             DataTable table = CreateDatatableOutput(column1Words, column2Words, worksheet);
 
             return table;
         }
 
 
-        public static Dictionary<string, List<string>> DictionariesWithSplitWords(HashSet<string> ignoredWords, Dictionary<string, List<string>> column1Words, ExcelWorksheet worksheet)
+
+        public static void DictionariesWithSplitWords(HashSet<string> ignoredWords, ExcelWorksheet worksheet, out Dictionary<string, List<string>> column1Words, out Dictionary<string, List<string>> column2Words)
         {
-            // Split words in column 1 and track the row numbers where each word occurs
+            column1Words = new Dictionary<string, List<string>>();
+            column2Words = new Dictionary<string, List<string>>();
+
+            // Split words in columns 1 and 2 and track the row numbers where each word occurs
             for (int i = 1; i <= worksheet.Dimension.Rows; i++)
             {
-                var value = worksheet.Cells[i, 1].Value?.ToString()?.Trim()?.ToLower();
-                if (string.IsNullOrEmpty(value)) continue;
+                var column1Value = worksheet.Cells[i, 1].Value?.ToString()?.Trim()?.ToLower();
+                var column2Value = worksheet.Cells[i, 2].Value?.ToString()?.Trim()?.ToLower();
 
-                var cellAddress = $"A{i}";
-                var words = value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                                 .Where(w => !ignoredWords.Contains(w, StringComparer.OrdinalIgnoreCase))
-                                 .ToList();
+                if (!string.IsNullOrEmpty(column1Value))
+                {
+                    var cellAddress = $"A{i}";
+                    var words = column1Value.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                                     .SelectMany(line => line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                                     .Where(w => !ignoredWords.Contains(w, StringComparer.OrdinalIgnoreCase))
+                                     .ToList();
 
-                column1Words[cellAddress] = words;
+                    column1Words[cellAddress] = words;
+                }
 
+                if (!string.IsNullOrEmpty(column2Value))
+                {
+                    var cellAddress = $"B{i}";
+                    var words = column2Value.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                                     .SelectMany(line => line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                                     .Where(w => !ignoredWords.Contains(w, StringComparer.OrdinalIgnoreCase))
+                                     .ToList();
 
+                    column2Words[cellAddress] = words;
+                }
             }
-            return column1Words;
         }
-        public static Dictionary<string, List<string>> DictionariesWithSplitWords2(HashSet<string> ignoredWords, Dictionary<string, List<string>> column2Words, ExcelWorksheet worksheet)
-        {
-            // Split words in column 2 and track the row numbers where each word occurs
-            for (int i = 1; i <= worksheet.Dimension.Rows; i++)
-            {
-                var value = worksheet.Cells[i, 2].Value?.ToString()?.Trim()?.ToLower();
-                if (string.IsNullOrEmpty(value)) continue;
 
-                var cellAddress = $"B{i}";
-                var words = value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                                 .Where(w => !ignoredWords.Contains(w, StringComparer.OrdinalIgnoreCase))
-                                 .ToList();
-
-
-                column2Words[cellAddress] = words;
-
-
-            }
-            return column2Words;
-        }
 
         public static DataTable CreateDatatableOutput(Dictionary<string, List<string>> column1Words, Dictionary<string, List<string>> column2Words, ExcelWorksheet worksheet)
         {
@@ -88,59 +82,120 @@ namespace DesktopAppCommonWords
             result.Columns.Add("Common Word");
             result.Columns.Add("Column 1 Matches");
             result.Columns.Add("Column 2 Matches");
+            result.Columns.Add("Column 1 Values");
+            result.Columns.Add("Column 2 Values");
 
             // Find common words between the two columns and track the row numbers where each word occurs
-            foreach (var word in column1Words.Values.SelectMany(x => x).Intersect(column2Words.Values.SelectMany(x => x)).Distinct())
+            foreach (var word in column1Words.SelectMany(p => p.Value).Intersect(column2Words.SelectMany(p => p.Value)).Distinct())
             {
-                var column1Matches = column1Words.Where(x => x.Value.Contains(word)).Select(x => x.Key);
-                var column2Matches = column2Words.Where(x => x.Value.Contains(word)).Select(x => x.Key);
+                var column1Matches = new List<string>();
+                var column2Matches = new List<string>();
+                var column1Values = new List<string>();
+                var column2Values = new List<string>();
 
-                foreach (var column1Match in column1Matches)
+                // Get the rows where the common word occurs in column 1
+                foreach (var kvp in column1Words)
                 {
-                    var column1Value = worksheet.Cells[column1Match].Value.ToString();
-
-                    // check if the column1 value is already present in the result
-                    var existingRow = result.AsEnumerable().FirstOrDefault(r =>
-                        string.Equals(r.Field<string>("Column 1 Matches"), column1Value, StringComparison.OrdinalIgnoreCase) &&
-                        string.Equals(r.Field<string>("Common Word"), word, StringComparison.OrdinalIgnoreCase));
-
-                    if (existingRow == null)
+                    if (kvp.Value.Contains(word))
                     {
-                        // add a new row to the result table
-                        var row = result.NewRow();
-                        row["Common Word"] = word;
-                        row["Column 1 Matches"] = column1Value;
-                        result.Rows.Add(row);
-                    }
-
-                    // add column2 matches to the existing row or a new row
-                    foreach (var column2Match in column2Matches)
-                    {
-                        var column2Value = worksheet.Cells[column2Match].Value.ToString();
-
-                        existingRow = result.AsEnumerable().FirstOrDefault(r =>
-
-                            string.Equals(r.Field<string>("Column 2 Matches"), column2Value, StringComparison.OrdinalIgnoreCase) &&
-                                                string.Equals(r.Field<string>("Common Word"), word, StringComparison.OrdinalIgnoreCase));
-
-                        if (existingRow == null)
-                        {
-                            var row = result.NewRow();
-                            row["Common Word"] = word;
-                            row["Column 2 Matches"] = column2Value;
-                            result.Rows.Add(row);
-                        }
-                        else if (existingRow["Column 1 Matches"].ToString() != column1Value)
-                        {
-                            // add column1 match to the existing row if it's not already present
-                            existingRow["Column 1 Matches"] += $",{column1Value}";
-                        }
+                        var rowNumber = GetRowNumberFromCellAddress(kvp.Key);
+                        column1Matches.Add(rowNumber);
+                        column1Values.Add(worksheet.Cells[kvp.Key].Value?.ToString() ?? "null");
                     }
                 }
+
+                // Get the rows where the common word occurs in column 2
+                foreach (var kvp in column2Words)
+                {
+                    if (kvp.Value.Contains(word))
+                    {
+                        var rowNumber = GetRowNumberFromCellAddress(kvp.Key);
+                        column2Matches.Add(rowNumber);
+                        column2Values.Add(worksheet.Cells[kvp.Key].Value?.ToString() ?? "null");
+                    }
+                }
+
+                // Keep track of already processed row numbers to avoid duplicates in output
+                var processedRowNumbers = new HashSet<string>();
+
+                // Add a row for each occurrence of the common word
+                for (int i = 0; i < Math.Max(column1Matches.Count, column2Matches.Count); i++)
+                {
+                    string column1Value = "";
+                    string column2Value = "";
+
+                    // Get the value from column 1 if it exists and has not been processed already
+                    if (i < column1Matches.Count && !processedRowNumbers.Contains(column1Matches[i]))
+                    {
+                        column1Value = column1Values[i];
+                        processedRowNumbers.Add(column1Matches[i]);
+                    }
+
+                    // Get the value from column 2 if it exists and has not been processed already
+                    if (i < column2Matches.Count && !processedRowNumbers.Contains(column2Matches[i]))
+                    {
+                        column2Value = column2Values[i];
+                        processedRowNumbers.Add(column2Matches[i]);
+                    }
+
+                    // Add a row only if there is a value for column 1 or column 2
+                    if (!string.IsNullOrEmpty(column1Value) || !string.IsNullOrEmpty(column2Value))
+                    {
+                        var row = result.NewRow();
+                        row["Common Word"] = word;
+
+                        if (i < column1Matches.Count)
+                        {
+                            row["Column 1 Matches"] = column1Matches[i];
+                            row["Column 1 Values"] = column1Value;
+                            if (!string.IsNullOrEmpty(column1Value))
+                            {
+                                var cell = worksheet.Cells[string.Format("D{0}", column1Matches[i])];
+                                var richText = cell.RichText.Add(column1Value);
+                                richText.Bold = true;
+                            }
+                        }
+                        else
+                        {
+                            row["Column 1 Matches"] = "";
+                            row["Column 1 Values"] = "";
+                        }
+
+                        if (i < column2Matches.Count)
+                        {
+                            row["Column 2 Matches"] = column2Matches[i];
+                            row["Column 2 Values"] = column2Value;
+                            if (!string.IsNullOrEmpty(column2Value))
+                            {
+                                var cell = worksheet.Cells[string.Format("E{0}", column2Matches[i])];
+                                var richText = cell.RichText.Add(column2Value);
+                                richText.Bold = true;
+                            }
+                        }
+                        else
+                        {
+                            row["Column 2 Matches"] = "";
+                            row["Column 2 Values"] = "";
+                        }
+
+                        result.Rows.Add(row);
+                    }
+                }
+
             }
 
             return result;
         }
+
+
+
+
+
+        private static string GetRowNumberFromCellAddress(string cellAddress)
+        {
+            return new string(cellAddress.Where(c => char.IsDigit(c)).ToArray());
+        }
+
     }
 
 }
