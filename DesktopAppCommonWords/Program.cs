@@ -148,12 +148,7 @@ namespace DesktopAppCommonWords
                         {
                             row["Column 1 Matches"] = column1Matches[i];
                             row["Column 1 Values"] = column1Value;
-                            if (!string.IsNullOrEmpty(column1Value))
-                            {
-                                var cell = worksheet.Cells[string.Format("D{0}", column1Matches[i])];
-                                var richText = cell.RichText.Add(column1Value);
-                                richText.Bold = true;
-                            }
+
                         }
                         else
                         {
@@ -164,13 +159,7 @@ namespace DesktopAppCommonWords
                         if (i < column2Matches.Count)
                         {
                             row["Column 2 Matches"] = column2Matches[i];
-                            row["Column 2 Values"] = column2Value;
-                            if (!string.IsNullOrEmpty(column2Value))
-                            {
-                                var cell = worksheet.Cells[string.Format("E{0}", column2Matches[i])];
-                                var richText = cell.RichText.Add(column2Value);
-                                richText.Bold = true;
-                            }
+                            row["Column 2 Values"] = column2Value;                           
                         }
                         else
                         {
