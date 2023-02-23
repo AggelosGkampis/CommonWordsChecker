@@ -1,8 +1,6 @@
 using OfficeOpenXml;
 using System.Data;
-
-
-
+using System.Linq;
 
 namespace DesktopAppCommonWords
 {
@@ -58,8 +56,10 @@ namespace DesktopAppCommonWords
                                      .SelectMany(line => line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
                                      .Where(w => !ignoredWords.Contains(w, StringComparer.OrdinalIgnoreCase))
                                      .ToList();
-
-                    column1Words[cellAddress] = words;
+                   
+                        column1Words[cellAddress] = words;
+                    
+                    
                 }
 
                 if (!string.IsNullOrEmpty(column2Value))
@@ -69,8 +69,10 @@ namespace DesktopAppCommonWords
                                      .SelectMany(line => line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
                                      .Where(w => !ignoredWords.Contains(w, StringComparer.OrdinalIgnoreCase))
                                      .ToList();
-
-                    column2Words[cellAddress] = words;
+                 
+                        column2Words[cellAddress] = words;
+                    
+                    
                 }
             }
         }
@@ -90,8 +92,8 @@ namespace DesktopAppCommonWords
             {
                 var column1Matches = new List<string>();
                 var column2Matches = new List<string>();
-                var column1Values = new List<string>();
-                var column2Values = new List<string>();
+                var column1Values = new HashSet<string>();  // use HashSet to eliminate duplicates
+                var column2Values = new HashSet<string>();  // use HashSet to eliminate duplicates
 
                 // Get the rows where the common word occurs in column 1
                 foreach (var kvp in column1Words)
@@ -100,7 +102,10 @@ namespace DesktopAppCommonWords
                     {
                         var rowNumber = GetRowNumberFromCellAddress(kvp.Key);
                         column1Matches.Add(rowNumber);
-                        column1Values.Add(worksheet.Cells[kvp.Key].Value?.ToString() ?? "null");
+                        if (!column1Values.Contains(word))
+                        {
+                            column1Values.Add(worksheet.Cells[kvp.Key].Value?.ToString() ?? "null");
+                        }
                     }
                 }
 
@@ -111,12 +116,12 @@ namespace DesktopAppCommonWords
                     {
                         var rowNumber = GetRowNumberFromCellAddress(kvp.Key);
                         column2Matches.Add(rowNumber);
-                        column2Values.Add(worksheet.Cells[kvp.Key].Value?.ToString() ?? "null");
+                        if (!column2Values.Contains(word))
+                        {
+                            column2Values.Add(worksheet.Cells[kvp.Key].Value?.ToString() ?? "null");
+                        }
                     }
                 }
-
-                // Keep track of already processed row numbers to avoid duplicates in output
-                var processedRowNumbers = new HashSet<string>();
 
                 // Add a row for each occurrence of the common word
                 for (int i = 0; i < Math.Max(column1Matches.Count, column2Matches.Count); i++)
@@ -125,56 +130,35 @@ namespace DesktopAppCommonWords
                     string column2Value = "";
 
                     // Get the value from column 1 if it exists and has not been processed already
-                    if (i < column1Matches.Count && !processedRowNumbers.Contains(column1Matches[i]))
+                    if (i < column1Matches.Count)
                     {
-                        column1Value = column1Values[i];
-                        processedRowNumbers.Add(column1Matches[i]);
+                        var rowNumber = column1Matches[i];
+                        if (!column1Values.Contains(rowNumber))
+                        {
+                            column1Values.Add(rowNumber);
+                            column1Value = worksheet.Cells[$"A{rowNumber}"].Value?.ToString() ?? "null";
+                        }
                     }
 
                     // Get the value from column 2 if it exists and has not been processed already
-                    if (i < column2Matches.Count && !processedRowNumbers.Contains(column2Matches[i]))
+                    if (i < column2Matches.Count)
                     {
-                        column2Value = column2Values[i];
-                        processedRowNumbers.Add(column2Matches[i]);
+                        var rowNumber = column2Matches[i];
+                        if (!column2Values.Contains(rowNumber))
+                        {
+                            column2Values.Add(rowNumber);
+                            column2Value = worksheet.Cells[$"B{rowNumber}"].Value?.ToString() ?? "null";
+                        }
                     }
 
-                    // Add a row only if there is a value for column 1 or column 2
-                    if (!string.IsNullOrEmpty(column1Value) || !string.IsNullOrEmpty(column2Value))
-                    {
-                        var row = result.NewRow();
-                        row["Common Word"] = word;
-
-                        if (i < column1Matches.Count)
-                        {
-                            row["Column 1 Matches"] = column1Matches[i];
-                            row["Column 1 Values"] = column1Value;
-
-                        }
-                        else
-                        {
-                            row["Column 1 Matches"] = "";
-                            row["Column 1 Values"] = "";
-                        }
-
-                        if (i < column2Matches.Count)
-                        {
-                            row["Column 2 Matches"] = column2Matches[i];
-                            row["Column 2 Values"] = column2Value;                           
-                        }
-                        else
-                        {
-                            row["Column 2 Matches"] = "";
-                            row["Column 2 Values"] = "";
-                        }
-
-                        result.Rows.Add(row);
-                    }
+                    // Add the row to the output table
+                    result.Rows.Add(word, string.Join(",", column1Matches), string.Join(",", column2Matches), column1Value, column2Value);
                 }
-
             }
 
             return result;
         }
+
 
 
 
